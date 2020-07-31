@@ -30,4 +30,5 @@ grid = torchvision.utils.make_grid(images)
 
 tb.add_image('images', grid)
 tb.add_graph(network, images)
+print("OK...")
 tb.close()
