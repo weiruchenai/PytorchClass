@@ -41,7 +41,7 @@ def get_num_correct(preds, labels):
 network = Network()
 # 创建优化器
 optimizer = optim.Adam(network.parameters(), lr=0.01)
-
+# 传入这个batch的图片
 images, labels = next(iter(train_loader))
 grid = torchvision.utils.make_grid(images)
 tb = SummaryWriter()
@@ -67,6 +67,8 @@ for epoch in range(10):
         total_correct += get_num_correct(preds, labels)
 
     end_time = datetime.datetime.now()
+
+    # tensorboard绘制图表
     tb.add_scalar('Loss', total_loss, epoch)
     tb.add_scalar('Number Correct', total_correct, epoch)
     tb.add_scalar('Accuracy', total_correct / len(train_set), epoch)
@@ -84,5 +86,5 @@ for epoch in range(10):
           "epoch time:", (end_time - start_time).seconds)
 
 # 训练完后将参数保存，以便下次能够直接加载模型
-torch.save(network.state_dict(), 'net_params.pkl')
+# torch.save(network.state_dict(), './data/net_params.pkl')
 
