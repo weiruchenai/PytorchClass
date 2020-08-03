@@ -1,3 +1,5 @@
+from itertools import product
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -12,6 +14,10 @@ import datetime
 from torch.utils.tensorboard import SummaryWriter
 from Net import Network
 from sklearn.metrics import confusion_matrix
+
+from RunBuilder import RunBuilder
+from RunManager import RunManager
+
 from resources.plot_confusion_matrix import plot_confusion_matrix
 
 
@@ -24,66 +30,43 @@ train_set = torchvision.datasets.FashionMNIST(
         transforms.ToTensor()
     ])
 )
-# 数据集加载器
-train_loader = DATA.DataLoader(
-    train_set,
-    batch_size=1000,
-    shuffle=True
+
+
+# 创建一个词典，并通过遍历获取三个参数的所有组合，能避免多个训练的嵌套
+parameters = dict(
+    lr=[.001],
+    batch_size=[100, 1000],
+    # shuffle=[True, False],
+    device=['cuda', 'cpu']
 )
 
+m = RunManager()
+for run in RunBuilder.get_runs(parameters):
 
-# 计算输出中正确的个数
-def get_num_correct(preds, labels):
-    return preds.argmax(dim=1).eq(labels).sum().item()
+    device = torch.device(run.device)
+    network = Network().to(device)
 
+    loader = DATA.DataLoader(train_set, batch_size=run.batch_size)
+    optimizer = optim.Adam(network.parameters(), lr=run.lr)
 
-# 创建Network对象
-network = Network()
-# 创建优化器
-optimizer = optim.Adam(network.parameters(), lr=0.01)
-# 传入这个batch的图片
-images, labels = next(iter(train_loader))
-grid = torchvision.utils.make_grid(images)
-tb = SummaryWriter()
-tb.add_image('images', grid)
-tb.add_graph(network, images)
+    m.begin_run(run, network, loader)
+    for epoch in range(2):
+        m.begin_epoch()
+        for batch in loader:
+            images = batch[0].to(device)  # 将传入网络的tensor也改为cuda
+            labels = batch[1].to(device)
+            preds = network(images)
+            loss = F.cross_entropy(preds, labels)
+            optimizer.zero_grad()  # 初始化梯度
+            loss.backward()  # 计算权重
+            optimizer.step()  # 更新权重
 
-# 创建循环，10个epoch，每个epoch更新600（60000/100）次权重
-for epoch in range(10):
-    start_time = datetime.datetime.now()
-    total_loss = 0
-    total_correct = 0
-    # 获取一个batch100张图片
-    for batch in train_loader:
-        images, labels = batch
-        preds = network(images)
-        loss = F.cross_entropy(preds, labels)  # 计算损失
-        # 先把梯度归零，并计算梯度以及更新权重
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+            m.track_loss(loss)
+            m.track_num_correct(preds, labels)
 
-        total_loss += loss.item()
-        total_correct += get_num_correct(preds, labels)
-
-    end_time = datetime.datetime.now()
-
-    # tensorboard绘制图表
-    tb.add_scalar('Loss', total_loss, epoch)
-    tb.add_scalar('Number Correct', total_correct, epoch)
-    tb.add_scalar('Accuracy', total_correct / len(train_set), epoch)
-
-    tb.add_histogram('conv1.bias', network.conv1.bias, epoch)
-    tb.add_histogram('conv1.weight', network.conv1.weight, epoch)
-    tb.add_histogram(
-        'conv1.weight.grad'
-        , network.conv1.weight.grad
-        , epoch
-    )
-    print("epoch:", epoch,
-          "total loss:", total_loss,
-          "total correct:", total_correct,
-          "epoch time:", (end_time - start_time).seconds)
+        m.end_epoch()
+    m.end_run()
+m.save('save_results')
 
 # 训练完后将参数保存，以便下次能够直接加载模型
 # torch.save(network.state_dict(), './data/net_params.pkl')

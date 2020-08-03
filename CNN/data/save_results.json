@@ -1,0 +1,82 @@
+[
+    {
+        "run": 1,
+        "epoch": 1,
+        "accuracy": 0.7169,
+        "epoch duration": 16.161725521087646,
+        "run duration": 47.794660806655884,
+        "lr": 0.001,
+        "batch_size": 100,
+        "device": "cuda"
+    },
+    {
+        "run": 1,
+        "epoch": 2,
+        "accuracy": 0.8282833333333334,
+        "epoch duration": 15.166297674179077,
+        "run duration": 63.734513998031616,
+        "lr": 0.001,
+        "batch_size": 100,
+        "device": "cuda"
+    },
+    {
+        "run": 2,
+        "epoch": 1,
+        "accuracy": 0.7140333333333333,
+        "epoch duration": 36.02732491493225,
+        "run duration": 36.83186316490173,
+        "lr": 0.001,
+        "batch_size": 100,
+        "device": "cpu"
+    },
+    {
+        "run": 2,
+        "epoch": 2,
+        "accuracy": 0.8106166666666667,
+        "epoch duration": 35.17281794548035,
+        "run duration": 72.29951238632202,
+        "lr": 0.001,
+        "batch_size": 100,
+        "device": "cpu"
+    },
+    {
+        "run": 3,
+        "epoch": 1,
+        "accuracy": 0.48395,
+        "epoch duration": 11.625327587127686,
+        "run duration": 12.589775085449219,
+        "lr": 0.001,
+        "batch_size": 1000,
+        "device": "cuda"
+    },
+    {
+        "run": 3,
+        "epoch": 2,
+        "accuracy": 0.6984666666666667,
+        "epoch duration": 11.584350824356079,
+        "run duration": 24.336034059524536,
+        "lr": 0.001,
+        "batch_size": 1000,
+        "device": "cuda"
+    },
+    {
+        "run": 4,
+        "epoch": 1,
+        "accuracy": 0.4787666666666667,
+        "epoch duration": 26.38785743713379,
+        "run duration": 28.752540588378906,
+        "lr": 0.001,
+        "batch_size": 1000,
+        "device": "cpu"
+    },
+    {
+        "run": 4,
+        "epoch": 2,
+        "accuracy": 0.6980333333333333,
+        "epoch duration": 28.105971813201904,
+        "run duration": 57.19232153892517,
+        "lr": 0.001,
+        "batch_size": 1000,
+        "device": "cpu"
+    }
+]
