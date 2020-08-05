@@ -5,8 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
-import torch.utils.data as DATA
-import matplotlib.pyplot as plt
+import torch.utils.data as DATAconda
 import torch.optim as optim
 import numpy as np
 
@@ -14,7 +13,6 @@ from Net import Network
 
 from RunBuilder import RunBuilder
 from RunManager import RunManager
-
 
 
 # 读取数据集

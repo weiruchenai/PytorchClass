@@ -4,7 +4,6 @@ import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
 import torch.utils.data as DATA
-import matplotlib.pyplot as plt
 import torch.optim as optim
 
 from Net import Network
