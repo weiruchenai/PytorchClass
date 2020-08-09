@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 import torchvision.transforms as transforms
-import torch.utils.data as DATAconda
+import torch.utils.data as DATA
 import torch.optim as optim
 import numpy as np
 

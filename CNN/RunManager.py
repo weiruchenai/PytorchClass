@@ -46,7 +46,7 @@ class RunManager:
         self.tb = SummaryWriter(comment=f'-{run}')
 
         images, labels = next(iter(self.loader))
-        grid = torchvision.utils.make_grid(images)
+        grid = torchvision.utils.make_grid(images)  # 将若干幅图像拼成衣服图像
 
         self.tb.add_image('images', grid)
         # 若指定了device则用指定的device，若未指定，则用‘cpu’作为默认值

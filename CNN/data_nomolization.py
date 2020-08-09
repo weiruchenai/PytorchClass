@@ -60,7 +60,7 @@ train_sets = {
 }
 parameters = dict(
     lr=[.001],
-    batch_size=[100],
+    batch_size=[100, 1000],
     # shuffle=[True, False],
     device=['cuda'],
     train_set=['not_normal', 'normal']
@@ -76,7 +76,7 @@ for run in RunBuilder.get_runs(parameters):
     optimizer = optim.Adam(network.parameters(), lr=run.lr)
 
     m.begin_run(run, network, loader)
-    for epoch in range(5):
+    for epoch in range(10):
         m.begin_epoch()
         for batch in loader:
             images = batch[0].to(device)  # 将传入网络的tensor也改为cuda
